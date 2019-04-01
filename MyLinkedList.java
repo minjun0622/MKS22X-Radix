@@ -158,28 +158,6 @@ public class MyLinkedList<E>{
     }
     return false;
   }
-  public String toStringDebug() { //Prints backwards for testing
-    String output = "[";
-    Node<E> current = end;
-    int idx = size - 1;
-    while (current != null && idx > 0) {
-      output += current + ", ";
-      current = current.prev();
-      idx--;
-    }
-    if (start == null) {
-      output +="]";
-    }
-    else {
-      output += start + "]";
-    }
-    return output;
-  }
-  public void clear() {
-    size = 0;
-    start = null;
-    end = null;
-  }
   public void extend(MyLinkedList<E> other) {
     if (this.size == 0) {
       this.start = other.start;
