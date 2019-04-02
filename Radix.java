@@ -1,46 +1,64 @@
 
 public class Radix {
-  private int index;
+  private int length;
+  /*
+  List of methods available from MyLinkedList
+  add
+  toString
+  get
+  set
+  contains
+  indexOf
+  add
+  removeFront
+  remove
+  remove
+  extend
+  */
+
 
  public static void radixsort(int[]data){
    //to sort this, try comparing from the first digit and then slowly move up towards the last digit.
     @SuppressWarnings("unchecked")
    MyLinkedList<Integer> buckets = new MyLinkedList[20];
    int max = data[0];
+
    for (int i = 0; i < buckets.length; i++) {
      buckets[i] = new MyLinkedList();
+     length = buckets.length;
    }
 
-    for (int i = 0; i < data.length; i++) {
+    for (int i = 0; i < buckets.length; i++) {
+      int digits = 0;
       if (max < data[i]) {
       max = data[i];
     }
-  }
-
-  for (int i = 0; i < index; i++){
-    int number;
-    if (data[i] < 10 || data[i] >= 0){
-      number = data[i];
-
+    if (data[i] < 0){
+      buckets.add(digits, data[i]);
+    }
+    if (data[i] > 0 && data < 10){
+      buckets.add(digits, data[i]);
+    }
+    if (data[i] >= 10 || data[i] < 100) {
+      getDigit(i, data[i]);
+      buckets.add(digit + 10);
+    }
+    if (digits < 10) {
+      digits++;
     }
   }
 
-     if (data[i] >= 10 || data[i] < 100) {
-       number = data[i] % 10;
-       number.add(index - 1);
-     }
+  //make a data[] and then transfer that to buckets.
+  //Then afer that is done, transfer THAT to another big LinkedList.
+  //Next digit from Linkedlist goes to buckets and it also goes to data[] when it is done.
 
-     if (data[i] < 0) {
-       number.add(i);
+  MyLinkedList<Integer> result = new MyLinkedList[];
 
-     }
-
-
-   }
-
-
-
- }
+  for (int i = 0; i < data.length; i++){
+    result[i] = new MyLinkedList();
+  }
+    result.extend(buckets);
+}
 
  public static int getDigit(int i, int num) {
     while (num > Math.pow(10, i)) {
@@ -51,6 +69,7 @@ public class Radix {
 
 
 public static void main(String[] args) {
+
 
 }
 
