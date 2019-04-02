@@ -16,7 +16,7 @@ public class Radix {
   extend
   */
 
-
+//hahahah
  public static void radixsort(int[]data){
    //to sort this, try comparing from the first digit and then slowly move up towards the last digit.
     @SuppressWarnings("unchecked")
@@ -30,22 +30,32 @@ public class Radix {
 
     for (int i = 0; i < buckets.length; i++) {
       int digits = 0;
+
       if (max < data[i]) {
       max = data[i];
     }
+
     if (data[i] < 0){
       buckets.add(digits, data[i]);
     }
+
     if (data[i] > 0 && data < 10){
       buckets.add(digits, data[i]);
     }
+
     if (data[i] >= 10 || data[i] < 100) {
-      getDigit(i, data[i]);
+      int temp = getDigit(i, data[i]);
+      if (temp % 10 > data[i] % 10){
+
+      }
+
       buckets.add(digit + 10);
     }
+
     if (digits < 10) {
       digits++;
     }
+
   }
 
   //make a data[] and then transfer that to buckets.
