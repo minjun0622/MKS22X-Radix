@@ -20,13 +20,14 @@ public class Radix {
  public static void radixsort(int[]data){
    //to sort this, try comparing from the first digit and then slowly move up towards the last digit.
     @SuppressWarnings("unchecked")
-   MyLinkedList<Integer> buckets = new MyLinkedList[20];
+    im gay   MyLinkedList<Integer> buckets = new MyLinkedList[20];
    int max = data[0];
 
    for (int i = 0; i < buckets.length; i++) {
-     buckets[i] = new MyLinkedList();
-     length = buckets.length;
+     buckets[i] = new MyLinkedList<Integer>();
    }
+
+   int max = maxDigit(data);
 
     for (int i = 0; i < buckets.length; i++) {
       int digits = 0;
@@ -55,6 +56,19 @@ public class Radix {
     if (digits < 10) {
       digits++;
     }
+    /*
+    for (int i = 0; i < times; i++) {
+     for (int j = 0; j < data.length; j++) {
+       int digit = Math.abs(data[j] % mod);
+       if (data[j] < 0) {
+         buckets[9-digit].addFront(digit);
+       } else {
+         buckets[digit+10].add(digit);
+       }
+     }
+   }
+
+    */
 
   }
 
@@ -70,11 +84,15 @@ public class Radix {
     result.extend(buckets);
 }
 
- public static int getDigit(int i, int num) {
-    while (num > Math.pow(10, i)) {
-      num = num / 10;
-    }
-    return num % 10;
+//a helper that finds the max digit inside a number.
+ public static int maxDigit(int[] data) {
+   int max = data[0];
+   for (int i = 0; i < data.length; i++){
+     if (data[i] > max) {
+       max = data[i];
+     }
+   }
+   return max;
   }
 
 
