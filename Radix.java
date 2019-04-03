@@ -46,56 +46,30 @@ public class Radix {
       }
     }
 
-      if (max < data[i]) {
-      max = data[i];
-    }
-
-    if (data[i] < 0){
-      buckets.add(digits, data[i]);
-    }
-
-    if (data[i] > 0 && data < 10){
-      buckets.add(digits, data[i]);
-    }
-
-    if (data[i] >= 10 || data[i] < 100) {
-      int temp = getDigit(i, data[i]);
-      if (temp % 10 > data[i] % 10){
-
+    for (int i = 0; i < 20; i++){
+      if (buckets[i].size() > 0) {
+        //conjoin the linkedlists together.
+        newdata.extend(buckets[i]);
       }
-
-      buckets.add(digit + 10);
+    }
+    for (int count = 2; count <= max; place++){
+      while (newdata.size() > 0) {
+        int item = newdata.remove(0);
+        int digit = (item / (int)Math.pow(10, place - 1)) % 10;
+        if (item < 0) {
+          buckets[9 - Math.abs(digit)].add(item);
+        }
+        else {
+          buckets[10 + digit].add(item);
+        }
+      }
+      for (int i = 0; i <  20; i++){
+        if (buckets.size() > 0) {
+          newdata.extend(buckets[i]);
+        }
+      }
     }
 
-    if (digits < 10) {
-      digits++;
-    }
-    /*
-    for (int i = 0; i < times; i++) {
-     for (int j = 0; j < data.length; j++) {
-       int digit = Math.abs(data[j] % mod);
-       if (data[j] < 0) {
-         buckets[9-digit].addFront(digit);
-       } else {
-         buckets[digit+10].add(digit);
-       }
-     }
-   }
-    */
-
-  }
-
-  //make a data[] and then transfer that to buckets.
-  //Then afer that is done, transfer THAT to another big LinkedList.
-  //Next digit from Linkedlist goes to buckets and it also goes to data[] when it is done.
-
-  MyLinkedList<Integer> result = new MyLinkedList[];
-
-  for (int i = 0; i < data.length; i++){
-    result[i] = new MyLinkedList();
-  }
-    result.extend(buckets);
-}
 
 //a helper that finds the max digit inside a number.
  public static int maxDigit(int[] data) {
@@ -110,6 +84,7 @@ public class Radix {
 
 
 public static void main(String[] args) {
+  System.out.println();
 
 
 }
