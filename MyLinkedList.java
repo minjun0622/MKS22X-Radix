@@ -1,7 +1,7 @@
 import java.io.* ;
 import java.util.* ;
 
-public class MyLinkedList<E>{
+public class MyLinkedList<E> {
 
   public class Node {
     private E data ;
@@ -44,181 +44,191 @@ public class MyLinkedList<E>{
       return fin ;
     }
   }
-  
-  private int size;
-  private Node<E> start;
-  private Node<E> end;
 
-  public MyLinkedList(int size, Node<E> start, Node<E> end) {
-    this.size = size;
-    this.start = start;
-    this.end = end;
-  }
+  private int length ;
+  private Node start, end ;
   public MyLinkedList() {
-    size = 0;
-    start = null;
-    end = null;
+    length = 0 ;
+    start = new Node(null, null, null) ;
+    end = new Node(null, null, null) ;
   }
+  public MyLinkedList(E[] a) {
+    	length = a.length ;
+    	if (a.length > 0){
+    		start = new Node(a[0]) ;
+    		Node current = start ;
+    		for (int i = 1 ; i < length ; i++) {
+    			current.setNext(new Node(a[i], current, null)) ;
+    			current = current.next() ;
+    		}
+    		end = current ;
+    	}
+    }
+
   public int size() {
-    return size;
+    return length ;
   }
-  public boolean add(E value) {
-    if (size == 0) {
-      start = new Node<E>(value, null, null);
-      end = start;
-      size++;
-      return true;
+  @SuppressWarnings("unchecked")
+  public void extend(MyLinkedList other){
+        if(other.size() == 0){
+          return;
+        }
+        if(this.size() ==0){
+          this.start = other.start;
+          this.length = other.length;
+          this.end= other.end;
+          other.clear();
+          return;
+        }
+        this.end.setNext(other.start);
+        this.end = other.end;
+        this.length += other.length;
+        other.clear();
+
+
     }
-    else {
-      Node<E> newEnd = new Node<E>(value, null, end);
-      end.setNext(newEnd);
-      end = newEnd;
-      size++;
-      return true;
+
+  private Node getNthNode(int n) {
+    if (n < 0 || n >= length) throw new IndexOutOfBoundsException("The index given is not valid and can't be used to find a Node!") ;
+    Node result = start ;
+    for (int i = 0 ; i < length && i < n ; i++) {
+      result = result.next() ;
     }
+    return result ;
   }
-  public String toString() {
-    String output = "[";
-    Node<E> current = start;
-    int idx = 0;
-    while (current != null && idx < size - 1) {
-      output += current + ", ";
-      current = current.next();
-      idx++;
-    }
-    if (end == null) {
-      output +="]";
-    }
-    else {
-      output += end + "]";
-    }
-    return output;
+
+  public E get(int index) {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException("The index given is not valid!") ;
+    Node item = getNthNode(index) ;
+    return item.getData() ;
   }
-  public E get(int idx) {
-    if (idx < 0 || idx >= size) {
-      throw new IndexOutOfBoundsException();
+
+  public E set(int index, E value) {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException("The index given is not valid!") ;
+    Node result = start ;
+    for (int i = 0 ; i < length ; i++) {
+      result = result.next() ;
     }
-    Node<E> current = start;
-    for (int x = 0; x < idx; x++) {
-      current = current.next();
-    }
-    return current.getData();
+    E previousData = result.getData() ;
+    result.setData(value) ;
+    return result.getData() ;
   }
-  public E set(int idx, E value) {
-    if (idx < 0 || idx >= size) {
-      throw new IndexOutOfBoundsException();
-    }
-    Node<E> current = start;
-    for (int x = 0; x < idx; x++) {
-      current = current.next();
-    }
-    E og = current.getData();
-    current.setData(value);
-    return og;
-  }
+
   public boolean contains(E value) {
-    Node<E> current = start;
-    while (current != null) {
-      if (current.getData() == value) {
-        return true;
-      }
-      current = current.next();
+    Node result = start ;
+    for (int i = 0 ; i < length ; i++) {
+      if (result.getData() == value) return true ;
+      result = result.next() ;
     }
-    return false;
+    return false ;
   }
+
+  public void clear() {
+    length = 0 ;
+		start = null ;
+    end = null ;
+	}
+
   public int indexOf(E value) {
-    Node<E> current = start;
-    for (int idx = 0; idx < size; idx++) {
-      if (current.getData().equals(value)) {
-        return idx;
-      }
-      current = current.next();
+    Node current = start ;
+    int index = 0 ;
+    while (current != null) {
+      E v = current.getData() ;
+      if (v.equals(value)) return index ;
+      current = current.next() ;
+      index++ ;
     }
-    return -1;
+    return -1 ;
   }
-  public void add(int idx, E value) {
-    if (idx < 0 || idx > size) {
-      throw new IndexOutOfBoundsException();
-    }
-    Node<E> current = start;
-    if (idx == 0) {
-      current = new Node<E>(value, start, null);
-      start = current;
-      size++;
-    }
-    else if (idx == size) {
-      current = new Node<E>(value, null, end);
-      end.setNext(current);
-      end = current;
-      size++;
+
+  public boolean add(E value) {
+    if (length == 0) {
+      end = new Node(value) ;
+      start = end ;
+      length++ ;
     }
     else {
-      for (int x = 0; x < idx - 1; x++) {
-        current = current.next();
-      }
-      Node<E> newNode = new Node<E>(value, current.next(), current);
-      current.setNext(newNode);
-      current = current.next().next();
-      current.setPrev(newNode);
-      size++;
+      Node nextNode = new Node(value, end, null) ;
+      end.setNext(nextNode) ;
+      end = end.next() ;
+      length++ ;
+    }
+    return true ;
+  }
+
+  public void add(int index, E value) {
+    if (index < 0 || index > length) throw new IndexOutOfBoundsException("The index given does not exist. Therefore, nothing can be changed!") ;
+    Node nodeToAdd = new Node(value, null, null) ;
+    if (index == 0) {
+      start.setPrev(nodeToAdd) ;
+      nodeToAdd.setNext(start) ;
+      start = nodeToAdd ;
+      length++ ;
+    }
+    else if (index == length) {
+      add(value) ;
+    }
+    else {
+      Node nodeToBeShifted = getNthNode(index) ;
+      nodeToAdd.setPrev(nodeToBeShifted.prev()) ;
+      nodeToAdd.setNext(nodeToBeShifted) ;
+      Node nodeThatStays = nodeToBeShifted.prev() ;
+      nodeThatStays.setNext(nodeToAdd) ;
+      nodeToBeShifted.setPrev(nodeToAdd) ;
+      length++ ;
+    }
+  }
+
+  public E remove(int index) {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException("The given index can't be used!") ;
+    E old = get(index) ;
+    if (index == 0) {
+      start = start.next() ;
+      if(start != null){
+
+
+      start.setPrev(null) ;
+    }
+      length-- ;
+      return old ;
+    }
+    if (index == length - 1) {
+      end = end.prev() ;
+      end.setNext(null) ;
+      length-- ;
+      return old ;
+    }
+
+    Node prevNode = getNthNode(index - 1) ;
+    Node nextNode = getNthNode(index + 1) ;
+    prevNode.setNext(nextNode) ;
+    nextNode.setPrev(prevNode) ;
+    length-- ;
+    return old ;
+  }
+
+  public boolean remove(E value) {
+    int index = indexOf(value) ;
+    if (index == -1) return false ;
+    else {
+      remove(index) ;
+      return true ;
     }
   }
   public E removeFront() {
-    E og = start.getData();
-    start = start.next();
-    start.setPrev(null);
-    size--;
-    return og;
+    return remove(0) ;
   }
-  public E remove(int idx) {
-    if (idx < 0 || idx >= size) {
-      throw new IndexOutOfBoundsException();
-    }
-    if (idx == 0) {
-      removeFront();
-    }
-    if (idx == size - 1) {
-      E og = end.getData();
-      end = end.prev();
-      end.setNext(null);
-      size --;
-      return og;
-    }
-    Node<E> current = start;
-    for (int x = 0; x < idx - 1; x++) {
-      current = current.next();
-    }
-    current = current.next();
-    E og = current.getData();
-    current = current.prev();
-    current.setNext(current.next().next());
-    Node<E> newCurrent = current.next();
-    newCurrent.setPrev(current);
-    size--;
-    return og;
-  }
-  public boolean remove(E value) {
-    if (contains(value)) {
-      remove(indexOf(value));
-      return true;
-    }
-    return false;
-  }
-   @SuppressWarnings("unchecked")
-  public void extend(MyLinkedList<E> other) {
-    if (this.size == 0) {
-      this.start = other.start;
-      this.end = other.end;
-    }
-    else {
-      this.end.setNext(other.start);
-      if (other.end != null) {
-        this.end = other.end;
+
+  public String toString() {
+    String fin = "[" ;
+    Node index = start ;
+    for (int i = 0 ; i < length ; i++) {
+      if (i < length - 1) fin += index.getData() + ", " ;
+      else {
+        fin += index.getData() ;
       }
+      index = index.next() ;
     }
-    other.start = null;
-    other.end = null;
-    this.size = this.size() + other.size();
-    other.size = 0;
+    return fin += "]" ;
   }
 }
