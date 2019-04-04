@@ -69,18 +69,17 @@ public class Radix {
         }
       }
     }
+    int index = 0;
+     while(newdata.size() > 0){
+       data[index]= newdata.remove(0);
+       index++;
+     }
+   }
+
 
 
 //a helper that finds the max digit inside a number.
- public static int maxDigit(int[] data) {
-   int max = data[0];
-   for (int i = 0; i < data.length; i++){
-     if (data[i] > max) {
-       max = data[i];
-     }
-   }
-   return max;
-  }
+
 
 
 public static void main(String[] args) {
